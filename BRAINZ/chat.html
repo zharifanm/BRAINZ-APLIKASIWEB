@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 215px;
+            background-color: #f2e6fa;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            border-right: 1px solid #e0d0f0;
+        }
+
+        .logo {
+            padding: 20px;
+            color: #9b59b6;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e0d0f0;
+            padding-bottom: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 20px;
+            color: #9b59b6;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-item.active {
+            color: #9b59b6;
+            font-weight: 600;
+            background-color: rgba(155, 89, 182, 0.1);
+        }
+
+        .nav-item .badge {
+            position: absolute;
+            right: 20px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 10px;
+        }
+
+        .account-label {
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .phone-section {
+            margin-top: auto;
+            padding: 15px 20px;
+            border-top: 1px solid #e0d0f0;
+            color: #e74c3c;
+            font-size: 12px;
+        }
+
+        .phone-section .phone-number {
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #f2e6fa;
+            border-bottom: 1px solid #e0d0f0;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #9b59b6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-right i {
+            color: #9b59b6;
+            font-size: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-status {
+            color: #9b59b6;
+            font-size: 12px;
+        }
+
+        /* Chat List */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .chat-list {
+            width: 300px;
+            border-right: 1px solid #e0d0f0;
+            overflow-y: auto;
+        }
+
+        .chat-search {
+            padding: 15px;
+            border-bottom: 1px solid #e0d0f0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e0d0f0;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+
+        .chat-item:hover {
+            background-color: #f9f5ff;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            border: 2px solid white;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .chat-info {
+            flex: 1;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .chat-type {
+            color: #9b59b6;
+            font-size: 12px;
+        }
+
+        .chat-meta {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .chat-meta .unread {
+            background-color: #9b59b6;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message-group {
+            margin-bottom: 20px;
+        }
+
+        .message-date {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin: 20px 0;
+        }
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .message.received {
+            margin-right: auto;
+        }
+
+        .message.sent {
+            margin-left: auto;
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            background-color: #f5f5f5;
+            padding: 12px 15px;
+            border-radius: 15px;
+            margin: 0 10px;
+        }
+
+        .message.sent .message-content {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .message-attachments {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .attachment-preview {
+            width: 60px;
+            height: 60px;
+            background-color: #ddd;
+            border-radius: 10px;
+        }
+
+        .file-attachment {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3949ab;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .download-button {
+            color: #3949ab;
+            cursor: pointer;
+        }
+
+        /* Chat Input */
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e0d0f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 25px;
+            padding: 10px 20px;
+        }
+
+        .emoji-button {
+            color: #999;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .send-button i {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">LOGO</div>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Overview</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-user-friends"></i>
+            <span>Match Mate</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Game</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Study Tracker</span>
+        </a>
+        
+        <a href="#" class="nav-item active">
+            <i class="fas fa-comments"></i>
+            <span>Chats</span>
+            <span class="badge">10</span>
+        </a>
+        
+        <div class="account-label">ACCOUNT</div>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+        
+        <div class="phone-section">
+            <div>Laporkan Mate</div>
+            <div class="phone-number">+62 123 1234 1234</div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="content">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </div>
+            
+            <div class="header-right">
+                <i class="fas fa-bell"></i>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div class="user-name">Febriani Dewi</div>
+                        <div class="user-status">LIHAT PROFIL</div>
+                    </div>
+                    <div class="avatar"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Chat List -->
+            <div class="chat-list">
+                <div class="chat-search">
+                    <input type="text" class="search-input" placeholder="Search group or friend">
+                </div>
+                
+                <!-- Chat Items -->
+                <div class="chat-item">
+                    <div class="chat-avatar">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">AMBIS 2025</div>
+                        <div class="chat-type">Group</div>
+                    </div>
+                    <div class="chat-meta">
+                        3 min ago
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-avatar">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-name">AMBIS 2025</div>
+                        <div class="chat-type">6 friends online</div>
+                    </div>
+                    <div class="chat-meta">
+                        <div class="unread">...</div>
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-info">
+                        <div class="chat-name">SNBT 2025</div>
+                        <div class="chat-type">Group</div>
+                    </div>
+                    <div class="chat-meta">
+                        10 min ago
+                        <div class="unread">4</div>
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-info">
+                        <div class="chat-name">Zharifa Nur Majidah</div>
+                        <div class="chat-type">Friend</div>
+                    </div>
+                    <div class="chat-meta">
+                        30 min ago
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-info">
+                        <div class="chat-name">Alfitatul Ukhrowiyah</div>
+                        <div class="chat-type">Friend</div>
+                    </div>
+                    <div class="chat-meta">
+                        1 hr ago
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-info">
+                        <div class="chat-name">Deska Zadanta</div>
+                        <div class="chat-type">Friend</div>
+                    </div>
+                    <div class="chat-meta">
+                        2 hrs ago
+                        <div class="unread">2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div class="chat-messages">
+                <div class="message-group">
+                    <div class="message-date">1 WEEK AGO</div>
+                    
+                    <div class="message received">
+                        <div class="chat-avatar"></div>
+                        <div class="message-content">
+                            Hi Guys,<br>
+                            Ada yang punya catatan logaritma apa ngga ya?
+                        </div>
+                        <div class="message-time">DOC · 28 min ago</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            Aku ada nih
+                        </div>
+                        <div class="message-time">ME · 28 min ago</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-attachments">
+                            <div class="attachment-preview"></div>
+                            <div class="attachment-preview"></div>
+                            <div class="attachment-preview"></div>
+                            <div class="attachment-preview">+6</div>
+                        </div>
+                        <div class="message-time">ME · 28 min ago</div>
+                    </div>
+                </div>
+                
+                <div class="message-group">
+                    <div class="message-date">TODAY</div>
+                    
+                    <div class="message received">
+                        <div class="chat-avatar"></div>
+                        <div class="message-content">
+                            Makasih!! BTW bisa minta tolong dijadiin ZIP aja?
+                        </div>
+                        <div class="message-time">DOC · 28 min ago</div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="file-attachment">
+                            <div class="file-icon">
+                                <i class="fas fa-file-archive"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">Logaritma.zip</div>
+                                <div class="file-size">15MB</div>
+                            </div>
+                            <div class="download-button">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                        <div class="message-time">DOC · 28 min ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Input -->
+        <div class="chat-input">
+            <div class="input-wrapper">
+                <div class="emoji-button">
+                    <i class="far fa-smile"></i>
+                </div>
+                <input type="text" class="message-input" placeholder="Start typing here">
+            </div>
+            <button class="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </main>
+</body>
+</html>
