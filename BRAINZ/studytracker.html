@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Group Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 220px;
+            background-color: #f0e6f6;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e0d0f0;
+        }
+        
+        .logo-container {
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: #e6d7f5;
+            color: #8a2be2;
+        }
+        
+        .nav-item.active {
+            border-left: 4px solid #8a2be2;
+        }
+        
+        .account-header {
+            padding: 15px 25px;
+            color: #666;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .contact-support {
+            margin-top: auto;
+            padding: 15px;
+            background-color: #f0e6f6;
+            border-top: 1px solid #e0d0f0;
+            text-align: center;
+            color: #e83e8c;
+            font-size: 14px;
+        }
+        
+        .contact-number {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        /* Main content styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #f8eeff;
+            border-bottom: 1px solid #e0d0f0;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #8a2be2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-button i {
+            margin-right: 10px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-icon {
+            margin-right: 20px;
+            color: #8a2be2;
+            font-size: 20px;
+        }
+        
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 10px;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .user-status {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        /* Content area styles */
+        .content {
+            flex: 1;
+            padding: 20px 30px;
+            display: flex;
+        }
+        
+        .content-main {
+            flex: 3;
+            margin-right: 20px;
+        }
+        
+        .content-sidebar {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .page-title {
+            color: #8a2be2;
+            margin-bottom: 30px;
+        }
+        
+        /* Progress chart styles */
+        .progress-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .chart-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .chart-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .chart-legend {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        
+        .legend-color.study {
+            background-color: #1e88e5;
+        }
+        
+        .legend-color.game {
+            background-color: #7986cb;
+        }
+        
+        .legend-color.chatting {
+            background-color: #ef5350;
+        }
+        
+        .legend-text {
+            color: #333;
+        }
+        
+        .project-list {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-left: 20px;
+        }
+        
+        .list-header {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .project-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f8eeff;
+            border-radius: 8px;
+        }
+        
+        /* Monitoring section styles */
+        .monitoring-section {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 30px;
+        }
+        
+        .monitoring-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .monitoring-title {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .time-selector {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #666;
+            background-color: #f5f5f5;
+        }
+        
+        .tab.active {
+            background-color: #e83e8c;
+            color: white;
+        }
+        
+        .tab i {
+            margin-right: 10px;
+        }
+        
+        .graph-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .graph-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .graph-line {
+            position: relative;
+            height: 2px;
+            background-color: #f0f0f0;
+            margin: 30px 0;
+        }
+        
+        .graph {
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            right: 0;
+            height: 90%;
+            background-image: linear-gradient(to bottom, rgba(233, 30, 99, 0.1), transparent);
+            clip-path: polygon(
+                0% 80%, 5% 75%, 10% 85%, 15% 80%, 20% 70%, 25% 65%, 30% 60%, 
+                35% 70%, 40% 75%, 45% 60%, 50% 50%, 55% 40%, 60% 45%, 65% 50%, 
+                70% 40%, 75% 45%, 80% 55%, 85% 65%, 90% 75%, 95% 80%, 100% 85%
+            );
+        }
+        
+        .graph::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            border-top: 2px solid #e83e8c;
+            clip-path: polygon(
+                0% 80%, 5% 75%, 10% 85%, 15% 80%, 20% 70%, 25% 65%, 30% 60%, 
+                35% 70%, 40% 75%, 45% 60%, 50% 50%, 55% 40%, 60% 45%, 65% 50%, 
+                70% 40%, 75% 45%, 80% 55%, 85% 65%, 90% 75%, 95% 80%, 100% 85%
+            );
+        }
+        
+        /* Friend history styles */
+        .friend-history {
+            margin-bottom: 20px;
+        }
+        
+        .history-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .friend-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 15px;
+        }
+        
+        .friend-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .friend-status {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .friend-hours {
+            color: #333;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tak%20berjudul201_20250306103051%202-WhAnmCsaRvo0GtilqDej4le1KzkHlv.png" alt="Brainz Logo" class="logo">
+        </div>
+        
+        <a href="Home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Overview</span>
+        </a>
+        
+        <a href="matchmate.html" class="nav-item">
+            <i class="fas fa-user-friends"></i>
+            <span>Match Mate</span>
+        </a>
+        
+        <a href="Game.html" class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Game</span>
+        </a>
+        
+        <a href="#" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Study Tracker</span>
+        </a>
+        
+        <a href="chat.html" class="nav-item">
+            <i class="fas fa-comment-alt"></i>
+            <span>Chats</span>
+            <span style="margin-left: auto; background-color: #e83e8c; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px;">10</span>
+        </a>
+        
+        <div class="account-header">ACCOUNT</div>
+        
+        <a href="setting.html" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+        
+        <div class="contact-support">
+            <div>Laporkan Mate</div>
+            <div class="contact-number">+62 123 1234 1234</div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <a href="#" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back</span>
+            </a>
+            
+            <div class="user-profile">
+                <i class="far fa-bell notification-icon"></i>
+                <div class="profile-pic"></div>
+                <div class="user-info">
+                    <div class="user-name">Febriani Dewi</div>
+                    <div class="user-status">LIHAT PROFIL</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content">
+            <div class="content-main">
+                <h1 class="page-title">Study Tracker</h1>
+                
+                <div class="progress-section">
+                    <!-- Progress Chart -->
+                    <div class="chart-container">
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <!-- Background circle -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#f0f0f0" stroke-width="20" />
+                            
+                            <!-- Study progress (blue) -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#1e88e5" stroke-width="20" stroke-dasharray="335 503" stroke-dashoffset="0" transform="rotate(-90 100 100)" />
+                            
+                            <!-- Game progress (purple) -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#7986cb" stroke-width="20" stroke-dasharray="167 503" stroke-dashoffset="-335" transform="rotate(-90 100 100)" />
+                            
+                            <!-- Chatting progress (red) -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#ef5350" stroke-width="20" stroke-dasharray="84 503" stroke-dashoffset="-502" transform="rotate(-90 100 100)" />
+                        </svg>
+                        <div class="chart-center">
+                            <div class="chart-value">30</div>
+                            <div class="chart-label">Weeks</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color study"></div>
+                            <div class="legend-text">Study</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color game"></div>
+                            <div class="legend-text">Game</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color chatting"></div>
+                            <div class="legend-text">Chatting</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project List -->
+                    <div class="project-list">
+                        <div class="list-header">LIST</div>
+                        <div class="project-item">Projek 1</div>
+                        <div class="project-item">Projek 1</div>
+                    </div>
+                </div>
+                
+                <!-- Monitoring Section -->
+                <div class="monitoring-section">
+                    <div class="monitoring-header">
+                        <div class="monitoring-title">STUDY MONITORING</div>
+                        <select class="time-selector">
+                            <option>Monthly</option>
+                            <option>Weekly</option>
+                            <option>Daily</option>
+                        </select>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active">
+                            <i class="far fa-clock"></i>
+                            <span>Hours Spend</span>
+                        </div>
+                        <div class="tab">
+                            <i class="fas fa-book"></i>
+                            <span>Study</span>
+                        </div>
+                        <div class="tab">
+                            <i class="fas fa-gamepad"></i>
+                            <span>Game</span>
+                        </div>
+                    </div>
+                    
+                    <div class="graph-container">
+                        <div class="graph-y-axis">
+                            <div>10</div>
+                            <div>9</div>
+                            <div>8</div>
+                            <div>7</div>
+                            <div>6</div>
+                            <div>5</div>
+                            <div>4</div>
+                            <div>3</div>
+                            <div>2</div>
+                            <div>1</div>
+                        </div>
+                        
+                        <div class="graph"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Friend History Sidebar -->
+            <div class="content-sidebar">
+                <div class="friend-history">
+                    <h2 class="history-title">Riwayat Teman</h2>
+                    
+                    <div class="friend-item">
+                        <div class="friend-info">
+                            <div class="friend-avatar"></div>
+                            <div>
+                                <div class="friend-name">AMBIS 2025</div>
+                                <div class="friend-status">Group</div>
+                            </div>
+                        </div>
+                        <div class="friend-hours">5 hours</div>
+                    </div>
+                    
+                    <div class="friend-item">
+                        <div class="friend-info">
+                            <div class="friend-avatar"></div>
+                            <div>
+                                <div class="friend-name">Zharifa</div>
+                                <div class="friend-status">Group</div>
+                            </div>
+                        </div>
+                        <div class="friend-hours">3 hours</div>
+                    </div>
+                    
+                    <div class="friend-item">
+                        <div class="friend-info">
+                            <div class="friend-avatar"></div>
+                            <div>
+                                <div class="friend-name">Afifatul</div>
+                                <div class="friend-status">Group</div>
+                            </div>
+                        </div>
+                        <div class="friend-hours">2 hours</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

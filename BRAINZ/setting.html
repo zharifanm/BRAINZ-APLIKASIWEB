@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainz - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 220px;
+            background-color: #f0e6f6;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e0d0f0;
+        }
+
+        .logo-container {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0d0f0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background-color: #e6d9f2;
+        }
+
+        .nav-item.active {
+            background-color: #e6d9f2;
+            color: #9333ea;
+        }
+
+        .nav-item i {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .nav-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .notification-badge {
+            position: absolute;
+            right: 20px;
+            background-color: #ff3366;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            padding: 12px 20px;
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .contact-info {
+            margin-top: auto;
+            padding: 15px 20px;
+            border-top: 1px solid #e0d0f0;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            color: #ff3366;
+            font-weight: 600;
+        }
+
+        .contact-number {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8eeff;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            color: #9333ea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-icon {
+            margin-right: 15px;
+            color: #9333ea;
+            font-size: 18px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 10px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profile-subtitle {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            color: #9333ea;
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+
+        .settings-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .settings-section {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #9333ea;
+            font-weight: 600;
+        }
+
+        .section-header i {
+            font-size: 18px;
+        }
+
+        .profile-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-image-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #777;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-bottom: 10px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .profile-image-container i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-image-text {
+            font-size: 12px;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #9333ea;
+        }
+
+        .save-button {
+            background-color: #9333ea;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+            transition: background-color 0.2s;
+        }
+
+        .save-button:hover {
+            background-color: #7928ca;
+        }
+
+        .chevron-icon {
+            color: #9333ea;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 10px 0;
+            }
+            
+            .main-content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tak%20berjudul201_20250306103051%202-JbFWaPeOsSSSDfMb4jVRHPftzSLgMJ.png" alt="Brainz Logo" class="logo">
+        </div>
+        
+        <a href="Home.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span class="nav-label">Overview</span>
+        </a>
+        
+        <a href="matchmate.html" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span class="nav-label">Match Mate</span>
+        </a>
+        
+        <a href="Game.html" class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span class="nav-label">Game</span>
+        </a>
+        
+        <a href="studytracker.html" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span class="nav-label">Study Tracker</span>
+        </a>
+        
+        <a href="chat.html" class="nav-item">
+            <i class="fas fa-comment-alt"></i>
+            <span class="nav-label">Chats</span>
+            <span class="notification-badge">10</span>
+        </a>
+        
+        <div class="section-title">ACCOUNT</div>
+        
+        <a href="#" class="nav-item active">
+            <i class="fas fa-cog"></i>
+            <span class="nav-label">Settings</span>
+        </a>
+        
+        <a href="#" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="nav-label">Logout</span>
+        </a>
+        
+        <div class="contact-info">
+            <div class="contact-label">Laporkan Mate</div>
+            <div class="contact-number">+62 123 1234 1234</div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <a href="#" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </a>
+            
+            <div class="user-profile">
+                <i class="far fa-bell notification-icon"></i>
+                
+                <div class="profile-info">
+                    <div class="profile-avatar"></div>
+                    <div>
+                        <div class="profile-name">Febriani Dewi</div>
+                        <div class="profile-subtitle">LIHAT PROFIL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="settings-title">Settings</h1>
+        
+        <div class="settings-card">
+            <div class="settings-section">
+                <div class="section-header">
+                    <span>Account Details</span>
+                    <i class="fas fa-chevron-down chevron-icon"></i>
+                </div>
+                
+                <div class="profile-upload">
+                    <div class="profile-image-container">
+                        <i class="fas fa-camera"></i>
+                        <div class="profile-image-text">Click to change photo</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" value="Febriani">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" value="Dewi">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" value="febrianidewi@ymail.com">
+                </div>
+                
+                <button class="save-button">SAVE NEW CHANGES</button>
+            </div>
+            
+            <div class="settings-section">
+                <div class="section-header">
+                    <span>Security</span>
+                    <i class="fas fa-chevron-right chevron-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
