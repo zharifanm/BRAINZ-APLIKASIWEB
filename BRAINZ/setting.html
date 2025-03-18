@@ -296,6 +296,100 @@
                 padding: 10px;
             }
         }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Notification Styles */
+        .notification {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            /*right: 20px;*/
+            background-color: #fff;
+            border: 1px solid #9333ea;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .notification img {
+            width: 50px; /* Adjust size as needed */
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Other styles... */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #f8eeff;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-image-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #777;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin-bottom: 10px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .save-button {
+            background-color: #9333ea;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+            transition: background-color 0.2s;
+        }
+
+        .save-button:hover {
+            background-color: #7928ca;
+        }
     </style>
 </head>
 <body>
@@ -338,7 +432,7 @@
             <span class="nav-label">Settings</span>
         </a>
         
-        <a href="#" class="nav-item">
+        <a href="logout.html" class="nav-item">
             <i class="fas fa-sign-out-alt"></i>
             <span class="nav-label">Logout</span>
         </a>
@@ -388,20 +482,20 @@
                 
                 <div class="form-group">
                     <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" value="Febriani">
+                    <input type="text" id="firstName" class="form-input" value="Febriani">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" value="Dewi">
+                    <input type="text" id="lastName" class="form-input" value="Dewi">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" value="febrianidewi@ymail.com">
+                    <input type="email" id="email" class="form-input" value="febrianidewi@ymail.com">
                 </div>
                 
-                <button class="save-button">SAVE NEW CHANGES</button>
+                <button id="saveChanges" class="save-button">SAVE NEW CHANGES</button>
             </div>
             
             <div class="settings-section">
@@ -411,7 +505,87 @@
                 </div>
             </div>
         </div>
+        <div class="notification" id="notification">
+            <div class="notification-content">
+                <img src="https://via.placeholder.com/50" alt="Notification Icon" />
+                <div class="notification-message" id="notificationMessage"></div>
+            </div>
+        </div>
     </div>
+    <script>
+        // Select the profile image container and the file input
+        const profileImageContainer = document.querySelector('.profile-image-container');
+        const profileImageText = document.querySelector('.profile-image-text');
+        
+        // Create an input element for file upload
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*'; 
+    
+        // Add click event to the profile image container
+        profileImageContainer.addEventListener('click', () => {
+            fileInput.click();
+        });
+    
+        // Add change event to the file input
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0]; 
+            if (file) {
+                const reader = new FileReader(); 
+                reader.onload = (e) => {
+                    // Update the profile image container with the new image
+                    profileImageContainer.style.backgroundImage = `url(${e.target.result})`;
+                    profileImageContainer.style.backgroundSize = 'cover';
+                    profileImageContainer.style.backgroundPosition = 'center';
+                    profileImageText.style.display = 'none'; 
+                };
+                reader.readAsDataURL(file); 
+            }
+        });
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.getElementById("notification");
+            const notificationMessage = document.getElementById("notificationMessage");
+            notificationMessage.textContent = message;
+            notification.style.display = "flex"; 
+            setTimeout(() => {
+                notification.style.display = "none"; 
+            }, 3000);
+        }
+         // Function to validate form inputs
+         document.addEventListener("DOMContentLoaded", function () {
+            const saveButton = document.getElementById("saveChanges");
+
+            if (saveButton) {
+                saveButton.addEventListener("click", function (event) {
+                    let firstName = document.getElementById("firstName").value.trim();
+                    let lastName = document.getElementById("lastName").value.trim();
+                    let email = document.getElementById("email").value.trim();
+
+                    function isValidEmail(email) {
+                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return emailPattern.test(email);
+                    }
+
+                    if (firstName === "" || lastName === "" || email === "") {
+                        alert("Semua kolom harus diisi!");
+                        event.preventDefault();
+                        return;
+                }
+
+                if (!isValidEmail(email)) {
+                    alert("Email tidak valid!");
+                    event.preventDefault();
+                    return;
+                }
+
+                alert("Perubahan berhasil disimpan!");
+            });
+        } else {
+            console.error("Tombol saveChanges tidak ditemukan.");
+        }
+        });
+    </script>
 </body>
 </html>
 
