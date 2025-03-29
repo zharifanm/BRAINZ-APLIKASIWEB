@@ -466,45 +466,48 @@
         
         <h1 class="settings-title">Settings</h1>
         
-        <div class="settings-card">
-            <div class="settings-section">
-                <div class="section-header">
-                    <span>Account Details</span>
-                    <i class="fas fa-chevron-down chevron-icon"></i>
+        <form action="save_user.php" method="POST" enctype="multipart/form-data">
+            <div class="settings-card">
+                <div class="settings-section">
+                    <div class="section-header">
+                        <span>Account Details</span>
+                        <i class="fas fa-chevron-down chevron-icon"></i>
+                    </div>
+                    
+                    <div class="profile-upload">
+                        <div class="profile-image-container" id="profileImageContainer">
+                            <i class="fas fa-camera"></i>
+                            <div class="profile-image-text">Click to change photo</div>
+                        </div>
+                        <input type="file" id="profilePhoto" name="profilePhoto" class="form-input" accept="image/*" style="display: none;" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <button type="submit" class="save-button">SAVE NEW CHANGES</button>
                 </div>
                 
-                <div class="profile-upload">
-                    <div class="profile-image-container">
-                        <i class="fas fa-camera"></i>
-                        <div class="profile-image-text">Click to change photo</div>
+                <div class="settings-section">
+                    <div class="section-header">
+                        <span>Security</span>
+                        <i class="fas fa-chevron-right chevron-icon"></i>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">First Name</label>
-                    <input type="text" id="firstName" class="form-input" value="Febriani">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" id="lastName" class="form-input" value="Dewi">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" id="email" class="form-input" value="febrianidewi@ymail.com">
-                </div>
-                
-                <button id="saveChanges" class="save-button">SAVE NEW CHANGES</button>
             </div>
-            
-            <div class="settings-section">
-                <div class="section-header">
-                    <span>Security</span>
-                    <i class="fas fa-chevron-right chevron-icon"></i>
-                </div>
-            </div>
-        </div>
+        </form>
         <div class="notification" id="notification">
             <div class="notification-content">
                 <img src="https://via.placeholder.com/50" alt="Notification Icon" />
@@ -516,11 +519,9 @@
         // Select the profile image container and the file input
         const profileImageContainer = document.querySelector('.profile-image-container');
         const profileImageText = document.querySelector('.profile-image-text');
+        const fileInput = document.getElementById('profilePhoto'); // Select the existing file input
         
-        // Create an input element for file upload
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*'; 
+        // Create an input element for file upload 
     
         // Add click event to the profile image container
         profileImageContainer.addEventListener('click', () => {
@@ -554,7 +555,7 @@
         }
          // Function to validate form inputs
          document.addEventListener("DOMContentLoaded", function () {
-            const saveButton = document.getElementById("saveChanges");
+            const saveButton = document.getElementById('.save-button');
 
             if (saveButton) {
                 saveButton.addEventListener("click", function (event) {
