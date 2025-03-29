@@ -1,3 +1,13 @@
+<?php
+// Start session
+session_start();
+
+// Include database connection
+require_once 'config.php';
+
+// Check if user is already logged in
+$loggedIn = isset($_SESSION['user_id']);
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -170,6 +180,7 @@
       align-items: center;
       justify-content: center;
       z-index: 50;
+      <?php echo !isset($_GET['login']) && !isset($_GET['signup']) ? 'display: none;' : ''; ?>
     }
     
     .modal {
@@ -267,6 +278,18 @@
       margin-left: 4px;
     }
     
+    .error-message {
+      color: #ef4444;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .success-message {
+      color: #10b981;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -283,14 +306,19 @@
     <div class="logo">LOGO</div>
     
     <div class="nav-links">
-      <a href="#">Home</a>
+      <a href="index.php">Home</a>
       <a href="#">About Us</a>
       <a href="#">Blog</a>
     </div>
     
     <div class="auth-links">
-      <a href="#">Log In</a>
-      <a href="#">Sign Up</a>
+      <?php if ($loggedIn): ?>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="logout.php">Log Out</a>
+      <?php else: ?>
+        <a href="?login">Log In</a>
+        <a href="?signup">Sign Up</a>
+      <?php endif; ?>
     </div>
   </nav>
   
@@ -299,7 +327,11 @@
     <div class="content">
       <h1>Selamat Datang</h1>
       <p>Tempat di mana belajar jadi lebih menyenangkan dan penuh inspirasi. Mari jelajahi bersama!</p>
-      <a href="#" class="cta-button">MULAI SEKARANG</a>
+      <?php if ($loggedIn): ?>
+        <a href="dashboard.php" class="cta-button">DASHBOARD</a>
+      <?php else: ?>
+        <a href="?signup" class="cta-button">MULAI SEKARANG</a>
+      <?php endif; ?>
     </div>
     
     <div class="image-container">
@@ -308,6 +340,7 @@
   </main>
   
   <!-- Login Modal -->
+  <?php if (isset($_GET['login'])): ?>
   <div class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -315,13 +348,26 @@
         <p>Kindly fill in your login details to proceed</p>
       </div>
       
-      <form>
+      <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">
+          <?php 
+            $error = $_GET['error'];
+            if ($error === 'empty') {
+              echo "Please fill in all fields";
+            } elseif ($error === 'invalid') {
+              echo "Invalid email or password";
+            }
+          ?>
+        </div>
+      <?php endif; ?>
+      
+      <form action="login_process.php" method="POST">
         <div class="form-group">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
         </div>
         
         <div class="form-group">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
         </div>
         
         <div class="divider">or Log in with</div>
@@ -336,31 +382,76 @@
       </form>
       
       <div class="signup-link">
-        Don't have an account yet?<a href="#">Sign Up</a>
+        Don't have an account yet?<a href="?signup">Sign Up</a>
       </div>
     </div>
   </div>
+  <?php endif; ?>
   
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.querySelector(".modal-overlay");
-    const loginButton = document.querySelector(".auth-links a:first-child");
-    const closeModal = document.querySelector(".modal-overlay");
-
-    // Tampilkan modal saat tombol "Log In" diklik
-    loginButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      modal.style.display = "flex";
-    });
-
-    // Sembunyikan modal saat area luar modal diklik
-    closeModal.addEventListener("click", function (e) {
-      if (e.target === closeModal) {
-        modal.style.display = "none";
+  <!-- Signup Modal -->
+  <?php if (isset($_GET['signup'])): ?>
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Create an Account</h2>
+        <p>Join our community today</p>
+      </div>
+      
+      <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">
+          <?php 
+            $error = $_GET['error'];
+            if ($error === 'empty') {
+              echo "Please fill in all fields";
+            } elseif ($error === 'email') {
+              echo "Email already exists";
+            } elseif ($error === 'password') {
+              echo "Passwords do not match";
+            }
+          ?>
+        </div>
+      <?php endif; ?>
+      
+      <form action="signup_process.php" method="POST">
+        <div class="form-group">
+          <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
+        </div>
+        
+        <button type="submit" class="login-btn">SIGN UP</button>
+      </form>
+      
+      <div class="signup-link">
+        Already have an account?<a href="?login">Log In</a>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+  
+  <script>
+    // Close modal when clicking outside
+    document.addEventListener('DOMContentLoaded', function() {
+      const modalOverlay = document.querySelector('.modal-overlay');
+      if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+          if (e.target === modalOverlay) {
+            window.location.href = 'index.php';
+          }
+        });
       }
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
+
