@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="script.js" defer></script>
+  <title>Brainz - Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Wave shape at bottom -->
+  <div class="wave"></div>
+  
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">
+      <img src="logo.png" alt="Logo">
+    </div>
+    
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">About Us</a>
+      <a href="#">Blog</a>
+    </div>
+    
+    <div class="auth-links">
+      <a href="#">Log In</a>
+      <a href="#">Sign Up</a>
+    </div>
+  </nav>
+  
+  <!-- Main Content -->
+  <main>
+    <div class="content">
+      <h1>Selamat Datang</h1>
+      <p>Tempat di mana belajar jadi lebih menyenangkan dan penuh inspirasi. Mari jelajahi bersama!</p>
+      <a href="#" class="cta-button">MULAI SEKARANG</a>
+    </div>
+  </main>
+  
+  <!-- Sign Up Modal -->
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Sign up</h2>
+        <p>There's no charge upon registration</p>
+      </div>
+      
+      <form action="signup.php" method="POST" onsubmit="return validateForm();">
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="Full Name" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="email" class="form-control" name="email" placeholder="Email" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+        </div>
+        
+        <div class="divider">or Sign Up with</div>
+        
+        <div class="social-login">
+          <button type="button" class="google-btn">
+            <img src="google.png" alt="Google logo" width="20" height="20">
+          </button>
+        </div>
+        
+        <button type="submit" class="signup-btn">SIGNUP</button>
+      </form>
+      
+      <div class="login-link">
+        Already a member? <a href="#">Login</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
