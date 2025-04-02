@@ -13,10 +13,10 @@ if ($conn->connect_error) {
 }
 
 // Ambil data user Diana Dewi
-$first_name = "Diana";
-$sql = "SELECT * FROM users WHERE first_name = ?";
+$email = "bimoaji56@gmail.com";
+$sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $first_name);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
@@ -424,7 +424,7 @@ $conn->close();
             
             <div class="profile-info">
                 <i class="far fa-bell"></i>
-                <div class="profile-pic"></div>
+                <div class="profile-pic" style="background-image: url('<?php echo $user['profile_photo'] ? $user['profile_photo'] : 'path/to/default/profile.jpg'; ?>');"></div>
                 <div>
                     <div class="profile-name"><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></div>
                     <div class="profile-subtitle">LIHAT PROFIL</div>

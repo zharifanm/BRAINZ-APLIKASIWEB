@@ -390,9 +390,67 @@
         .save-button:hover {
             background-color: #7928ca;
         }
+        /* Profile Options */
+        .profile-options {
+            display: none;
+            flex-direction: column;
+            /*margin-top: 10px;*/
+            position: absolute;
+            top: 350px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-left: 120px;
+        }
+
+        .profile-options button {
+            background-color: #9333ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .profile-options button:hover {
+            background-color: #7928ca;
+        }
+
+        /* Notification Styles */
+        .notification {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 57%;
+            left: 58%;
+            transform: translate(-50%, -50%); /* Center the notification */
+            background-color: #f1f1f1;
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Add padding for better appearance */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 200px; /* Set a fixed width */
+            text-align: center;
+        }
+
+        .notification-message {
+            font-size: 16px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <div class="notification-message" id="notificationMessage"></div>
+        </div>
+    </div>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo-container">
@@ -478,6 +536,10 @@
                         <div class="profile-image-container" id="profileImageContainer">
                             <i class="fas fa-camera"></i>
                             <div class="profile-image-text">Click to change photo</div>
+                            <div class="profile-options" style="display: none;">
+                                <button type="button" id="changePhotoButton">Ubah Foto Profil</button>
+                                <button type="button" id="deleteProfilePhotoButton">Hapus Foto Profil</button>
+                            </div>
                         </div>
                         <input type="file" id="profilePhoto" name="profilePhoto" class="form-input" accept="image/*" style="display: none;" required>
                     </div>
@@ -498,6 +560,7 @@
                     </div>
                     
                     <button type="submit" class="save-button">SAVE NEW CHANGES</button>
+                    
                 </div>
                 
                 <div class="settings-section">
@@ -519,12 +582,16 @@
         // Select the profile image container and the file input
         const profileImageContainer = document.querySelector('.profile-image-container');
         const profileImageText = document.querySelector('.profile-image-text');
-        const fileInput = document.getElementById('profilePhoto'); // Select the existing file input
-        
-        // Create an input element for file upload 
+        const fileInput = document.getElementById('profilePhoto'); 
+        const profileOptions = document.querySelector('.profile-options');
     
         // Add click event to the profile image container
         profileImageContainer.addEventListener('click', () => {
+            profileOptions.style.display = profileOptions.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Add click event to the change photo button
+        document.getElementById('changePhotoButton').addEventListener('click', function() {
             fileInput.click();
         });
     
@@ -539,10 +606,34 @@
                     profileImageContainer.style.backgroundSize = 'cover';
                     profileImageContainer.style.backgroundPosition = 'center';
                     profileImageText.style.display = 'none'; 
+                    profileOptions.style.display = 'none'; // Hide options after changing photo
                 };
                 reader.readAsDataURL(file); 
             }
         });
+
+        // Event listener for delete profile photo button
+        document.getElementById('deleteProfilePhotoButton').addEventListener('click', function() {
+            if (confirm("Apakah Anda yakin ingin menghapus foto profil?")) {
+                const formData = new FormData();
+                formData.append('deleteProfilePhoto', true);
+                formData.append('email', document.getElementById('email').value); // Ambil email dari input
+
+                fetch('save_user.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    showNotification(data); // Tampilkan notifikasi
+                    document.querySelector('.profile-image-container').style.backgroundImage = `url('path/to/default/photo.jpg')`; // Ganti dengan path foto default
+                    document.querySelector('.profile-image-text').style.display = 'block';
+                    profileOptions.style.display = 'none'; // Hide options after deleting photo
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
         // Function to show notification
         function showNotification(message) {
             const notification = document.getElementById("notification");
@@ -555,7 +646,7 @@
         }
          // Function to validate form inputs
          document.addEventListener("DOMContentLoaded", function () {
-            const saveButton = document.getElementById('.save-button');
+            const saveButton = document.getElementById('save-button');
 
             if (saveButton) {
                 saveButton.addEventListener("click", function (event) {
