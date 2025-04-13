@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Assignment | Todo List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="back-link">
+                <a href="todo.php">← Back</a>
+            </div>
+            
+            <h1>New Assignment</h1>
+            
+            <form id="taskForm" action="todo.php" method="POST">
+                <div class="form-group">
+                    <label for="title">Assignment's Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter assignment title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" id="description" name="description" placeholder="Enter description" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="deadline">Deadline</label>
+                    <div class="date-input-container">
+                        <input type="date" id="deadline" name="deadline" required>
+                        <span class="calendar-icon">📅</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="create-btn">Create New Task</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="todo.js"></script>
+</body>
+</html>
