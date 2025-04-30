@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Match Mate</title>
     <style>
         * {
@@ -23,7 +25,7 @@
             height: 100vh;
             background-color: #f0e6f6;
             padding: 20px;
-            display: flex;
+            /* display: flex; */
             flex-direction: column;
         }
 
@@ -233,13 +235,18 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BA7C5E70A-CE90-40F4-8FEC-C90F5063A267%7D-xI5aTuV56Xf2ejnWxyqGzbQvu2SXI3.png" alt="Match Mate Logo">
+    <div class="sidebar hidden md:flex fixed" id="sidebar">
+        <div class="logo justify-between items-center flex">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/%7BA7C5E70A-CE90-40F4-8FEC-C90F5063A267%7D-xI5aTuV56Xf2ejnWxyqGzbQvu2SXI3.png"
+                alt="Match Mate Logo">
+                <button id="closeSidebar" class="md:hidden">
+                    <i class="fas fa-xmark" id="close-bar"></i>
+                </button>
         </div>
-        
+
         <div class="nav-menu">
             <a href="Home.html" class="nav-item">
                 <i class="fas fa-home"></i>
@@ -262,9 +269,9 @@
                 <span>Chats</span>
                 <div class="badge">5</div>
             </a>
-            
+
             <div class="account-label">ACCOUNT</div>
-            
+
             <a href="setting.html" class="nav-item">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
@@ -274,7 +281,7 @@
                 <span>Logout</span>
             </a>
         </div>
-        
+
         <div class="report-section">
             <div class="report-icon">
                 <i class="fas fa-exclamation-triangle" style="color: #ff0000;"></i>
@@ -285,7 +292,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
@@ -293,7 +300,7 @@
                 <i class="fas fa-arrow-left"></i>
                 <span>Back</span>
             </div>
-            
+
             <div class="user-profile">
                 <div class="notification-icon">
                     <i class="far fa-bell"></i>
@@ -307,30 +314,51 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="content">
+            <button id="openSidebar" class="md:hidden">
+                <i class="fas fa-bars" id="open-bar"></i>
+            </button>
             <h1 class="content-title">Match Mate</h1>
             <p class="content-subtitle">Temukan teman belajar sesuai kriteriamu dan mulai untuk berdiskusi!</p>
-            
+
             <div class="card-grid">
                 <!-- First row of cards -->
                 <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
-                
+
                 <!-- Second row of cards -->
                 <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
                 <div class="card"></div>
             </div>
-            
+
             <div class="view-all-button">
                 Lihat Semua
                 <i class="fas fa-arrow-right"></i>
             </div>
         </div>
     </div>
+    <script>
+        // Sidebar toggle for mobile view
+        const sidebar = document.getElementById('sidebar');
+        const menubar = document.getElementById('menu-bar');
+        const openSidebar = document.getElementById('openSidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('hidden');
+            sidebar.classList.add('flex');
+        });
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('flex');
+            sidebar.classList.add('hidden');
+        });
+
+    </script>
 </body>
+
 </html>
