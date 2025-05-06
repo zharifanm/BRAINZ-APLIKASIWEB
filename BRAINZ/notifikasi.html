@@ -1,576 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notification Interface</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        /* Layout */
-        .app-container {
-            display: flex;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 230px;
-            background-color: #f0e6f5;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #e5e5e5;
-        }
-
-        .logo-container {
-            padding: 24px;
-            border-bottom: 1px solid #e5e5e5;
-            text-align: center;
-        }
-
-        .logo {
-            max-width: 120px;
-            height: auto;
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 24px 16px;
-        }
-
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 8px;
-            margin-bottom: 8px;
-            color: #4b5563;
-            cursor: pointer;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-
-        .sidebar-item:hover {
-            background-color: #ede9f1;
-        }
-
-        .sidebar-item-icon {
-            margin-right: 12px;
-            color: #6b7280;
-        }
-
-        .sidebar-item-badge {
-            margin-left: auto;
-            background-color: #ef4444;
-            color: white;
-            font-size: 12px;
-            border-radius: 9999px;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .account-section {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .account-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #6b7280;
-            margin-bottom: 8px;
-        }
-
-        .sidebar-footer {
-            padding: 16px;
-            border-top: 1px solid #e5e5e5;
-            margin-top: auto;
-        }
-
-        .contact-info {
-            display: flex;
-            align-items: center;
-            color: #9333ea;
-            font-size: 12px;
-        }
-
-        .contact-icon {
-            margin-right: 8px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background-color: #f0e6f5;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .back-button {
-            display: flex;
-            align-items: center;
-            color: #9333ea;
-            font-weight: 500;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .back-icon {
-            margin-right: 8px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .notification-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin-right: 16px;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #e5e5e5;
-            overflow: hidden;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-info {
-            margin-left: 8px;
-            text-align: right;
-        }
-
-        .profile-name {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .profile-link {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        /* Notification Content */
-        .notification-content {
-            flex: 1;
-            padding: 24px;
-            overflow: auto;
-        }
-
-        .notification-title {
-            font-size: 20px;
-            font-weight: 500;
-            color: #9333ea;
-            margin-bottom: 24px;
-        }
-
-        .notification-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .notification-item {
-            display: flex;
-            align-items: flex-start;
-            padding: 16px;
-            border-bottom: 1px solid #e5e5e5;
-            background-color: white;
-            border-radius: 8px;
-        }
-
-        .notification-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 16px;
-            background-color: #e5e5e5;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .notification-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .notification-avatar.system {
-            background-color: #0d9488;
-            color: white;
-        }
-
-        .notification-content-text {
-            flex: 1;
-        }
-
-        .notification-message {
-            font-size: 14px;
-        }
-
-        .notification-date {
-            font-size: 12px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-
-        .dismiss-button {
-            background: none;
-            border: none;
-            color: #9ca3af;
-            font-size: 24px;
-            cursor: pointer;
-            margin-left: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-            }
-
-            .sidebar-nav {
-                display: none;
-            }
-
-            .sidebar-footer {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>Notifikasi Match Mate</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
-<body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo-container">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Tak%20berjudul201_20250306103051%201-eJfQbwDZau2Q03fCAW9067xuyPbH9B.png"
-                    alt="BRAINZ Logo" class="logo">
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="Home.html" class="sidebar-item">
-                    <span class="sidebar-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                    </span>
-                    <span>Overview</span>
-                </a>
-
-                <a href="matchmate.html" class="sidebar-item">
-                    <span class="sidebar-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                    </span>
-                    <span>Match Mate</span>
-                </a>
-
-                <a href="Game.html" class="sidebar-item">
-                    <span class="sidebar-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                            <path d="M12 12h.01"></path>
-                            <path d="M7 12h.01"></path>
-                            <path d="M17 12h.01"></path>
-                        </svg>
-                    </span>
-                    <span>Game</span>
-                </a>
-
-                <a href="studytracker.html" class="sidebar-item">
-                    <span class="sidebar-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </span>
-                    <span>Study Tracker</span>
-                </a>
-
-                <a href="chat.html" class="sidebar-item">
-                    <span class="sidebar-item-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </span>
-                    <span>Chats</span>
-                </a>
-
-                <div class="account-section">
-                    <p class="account-label">ACCOUNT</p>
-
-                    <div class="sidebar-item">
-                        <span class="sidebar-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
-                                </path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </span>
-                        <span>Settings</span>
-                    </div>
-
-                    <div class="sidebar-item">
-                        <span class="sidebar-item-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg>
-                        </span>
-                        <span>Logout</span>
-                    </div>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="contact-info">
-                    <span class="contact-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                            </path>
-                        </svg>
-                    </span>
-                    <div>
-                        <p style="font-weight: 500;">Laporkan Mate</p>
-                        <p>+62 123 1234 1234</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <button class="back-button">
-                    <span class="back-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m12 19-7-7 7-7"></path>
-                            <path d="M19 12H5"></path>
-                        </svg>
-                    </span>
-                    Back
-                </button>
-
-                <div class="header-right">
-                    <button class="notification-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-                        </svg>
-                    </button>
-
-                    <div class="profile">
-                        <div class="avatar">
-                            <img src="https://via.placeholder.com/32" alt="Profile">
-                        </div>
-                        <div class="profile-info">
-                            <p class="profile-name">Febriani Dewi</p>
-                            <p class="profile-link">LIHAT PROFIL</p>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Notification Content -->
-            <div class="notification-content">
-                <h1 class="notification-title">Notifications</h1>
-
-                <div class="notification-list" id="notification-list">
-                    <!-- Notification items will be generated here -->
-                </div>
-            </div>
-        </div>
+<body class="flex bg-gray-100">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="hidden md:flex flex-col w-60 h-screen bg-purple-50 p-5 fixed">
+    <div class="flex items-center justify-between mb-8">
+      <img src="logo.png" alt="Logo" class="w-10 h-10">
+      <button id="closeSidebar" class="md:hidden text-2xl text-gray-600">
+        <i class="fas fa-xmark"></i>
+      </button>
     </div>
+    <nav class="flex flex-col space-y-3 flex-1">
+      <a href="Home.html" class="flex items-center p-2 rounded-lg hover:bg-purple-200 text-gray-700">
+        <i class="fas fa-home mr-3"></i>Overview
+      </a>
+      <a href="matchmate.html" class="flex items-center p-2 rounded-lg hover:bg-purple-200 text-gray-700">
+        <i class="fas fa-users mr-3"></i>Match Mate
+      </a>
+      <a href="notifikasi.html" class="flex items-center p-2 rounded-lg bg-purple-200 text-gray-800">
+        <i class="far fa-bell mr-3"></i>Notifikasi
+      </a>
+      <a href="chat.html" class="flex items-center p-2 rounded-lg hover:bg-purple-200 text-gray-700">
+        <i class="fas fa-comment mr-3"></i>Chats
+        <span class="ml-auto bg-red-500 text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">5</span>
+      </a>
+      <div class="mt-6 pt-4 border-t border-gray-200 text-xs font-semibold text-gray-600 uppercase">Account</div>
+      <a href="setting.html" class="flex items-center p-2 rounded-lg hover:bg-purple-200 text-gray-700">
+        <i class="fas fa-cog mr-3"></i>Settings
+      </a>
+      <a href="#" class="flex items-center p-2 rounded-lg hover:bg-purple-200 text-gray-700">
+        <i class="fas fa-sign-out-alt mr-3"></i>Logout
+      </a>
+    </nav>
+    <div class="mt-auto flex items-center p-3 bg-purple-50 rounded-lg">
+      <div class="bg-white p-2 rounded mr-3">
+        <i class="fas fa-exclamation-triangle text-red-500"></i>
+      </div>
+      <div class="text-sm">
+        <div class="font-semibold text-red-500">Laporkan Masalah</div>
+        <div class="text-gray-600">+62 812 6124 0124</div>
+      </div>
+    </div>
+  </aside>
 
-    <script>
-        // Notification data
-        const notifications = [
-            {
-                id: 1,
-                avatar: "https://via.placeholder.com/40",
-                message: "Glenn accepted your invite to co-host Cozy 3BR home minutes from downtown Quahog",
-                date: "March 6, 2022",
-                type: "invite"
-            },
-            {
-                id: 2,
-                avatar: "https://via.placeholder.com/40",
-                message: "Glenn accepted your invite to co-host Cozy 3BR home minutes from downtown Quahog",
-                date: "March 6, 2022",
-                type: "invite"
-            },
-            {
-                id: 3,
-                avatar: "https://via.placeholder.com/40",
-                icon: "airbnb",
-                message: "Cleveland Brown has left you a review. Both of your reviews from this trip are now public.",
-                date: "February 26, 2023",
-                type: "review"
-            },
-            {
-                id: 4,
-                avatar: "https://via.placeholder.com/40",
-                message: "Glenn accepted your invite to co-host Cozy 3BR home minutes from downtown Quahog",
-                date: "March 6, 2022",
-                type: "invite"
-            },
-            {
-                id: 5,
-                avatar: "https://via.placeholder.com/40",
-                message: "Glenn accepted your invite to co-host Cozy 3BR home minutes from downtown Quahog",
-                date: "March 6, 2022",
-                type: "invite"
-            },
-            {
-                id: 6,
-                avatar: "https://via.placeholder.com/40",
-                icon: "airbnb",
-                message: "Cleveland Brown has left you a review. Both of your reviews from this trip are now public.",
-                date: "February 26, 2023",
-                type: "review"
-            },
-            {
-                id: 7,
-                avatar: "https://via.placeholder.com/40",
-                message: "Glenn accepted your invite to co-host Cozy 3BR home minutes from downtown Quahog",
-                date: "March 6, 2022",
-                type: "invite"
-            },
-            {
-                id: 8,
-                avatar: "https://via.placeholder.com/40",
-                icon: "airbnb",
-                message: "Please confirm your email address by clicking on the link we just emailed you. If you cannot find the email, you can request a new confirmation email or change your email address.",
-                date: "March 1, 2022",
-                type: "email"
-            }
-        ];
+  <!-- Main Content -->
+  <main class="flex-1 min-h-screen md:ml-60 p-5">
+    <header class="flex items-center justify-between bg-purple-50 p-4 rounded-lg mb-6">
+      <button id="openSidebar" class="md:hidden text-2xl text-gray-600 mr-4">
+        <i class="fas fa-bars"></i>
+      </button>
+      <button class="flex items-center text-purple-600 font-semibold">
+        <i class="fas fa-arrow-left mr-2"></i>Back
+      </button>
+      <div class="flex items-center">
+        <button class="relative mr-4 text-gray-700 text-xl">
+          <i class="far fa-bell"></i>
+        </button>
+        <div class="flex items-center">
+          <div class="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
+          <div>
+            <div class="font-semibold">Febriani Dewi</div>
+            <div class="text-xs text-gray-600">3 hari yang lalu</div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-        // Function to render notifications
-        function renderNotifications() {
-            const notificationList = document.getElementById('notification-list');
-            notificationList.innerHTML = '';
+    <section>
+      <h1 class="text-2xl font-bold text-purple-600 mb-4">Notifikasi</h1>
+      <div id="notificationList" class="space-y-4">
+        <!-- JS Inject -->
+      </div>
+    </section>
+  </main>
 
-            notifications.forEach(notification => {
-                const notificationItem = document.createElement('div');
-                notificationItem.className = 'notification-item';
-                notificationItem.dataset.id = notification.id;
+  <script>
+    const notifications = [
+      { id: 1, avatar: '', message: 'Zharifa menerima permintaan pertemanan kamu!.', date: 'March 6, 2022' },
+      { id: 2, avatar: '', message: 'Afifatul mengundangmu untuk bermain di matchmate!', date: 'February 26, 2023' },
+      { id: 3, avatar: '', message: 'Please confirm your email address by clicking the link.', date: 'March 1, 2022' },
+      { id: 4, avatar: '', message: 'Jangan lupakan tugas di todo list yaa!', date: 'March 6, 2022' },
+      { id: 5, avatar: '', message: 'Ayo cek game seru di matchmate!', date: 'February 26, 2023' },
+      { id: 6, avatar: '', message: 'Jangan lupa untuk melihat laporan perkembangamu yaa', date: 'March 1, 2022' },
+      { id: 7, avatar: '', message: 'Deska mengirimi permintaan pertemanan, ayo cek!', date: 'March 6, 2022' },
+      { id: 8, avatar: '', message: 'Sayang sekali kamu melewatkan kesempatan di matchmate', date: 'February 26, 2023' },
+      { id: 9, avatar: '', message: 'Zharifa mengundangmu untuk bermain di mattchmate!', date: 'March 1, 2022' }
+    ];
 
-                let avatarContent = '';
-                if (notification.type === 'review' || notification.type === 'email') {
-                    avatarContent = `
-                        <div class="notification-avatar system">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
-                        </div>
-                    `;
-                } else {
-                    avatarContent = `
-                        <div class="notification-avatar">
-                            <img src="${notification.avatar}" alt="">
-                        </div>
-                    `;
-                }
+    function renderNotifications() {
+      const list = document.getElementById('notificationList');
+      list.innerHTML = '';
+      notifications.forEach(n => {
+        const item = document.createElement('div');
+        item.className = 'flex items-start bg-white p-4 rounded-xl shadow';
 
-                notificationItem.innerHTML = `
-                    ${avatarContent}
-                    <div class="notification-content-text">
-                        <p class="notification-message">${notification.message}</p>
-                        <p class="notification-date">${notification.date}</p>
-                    </div>
-                    <button class="dismiss-button" onclick="removeNotification(${notification.id})">×</button>
-                `;
-
-                notificationList.appendChild(notificationItem);
-            });
+        const avatarWrapper = document.createElement('div');
+        avatarWrapper.className = 'flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-4 flex items-center justify-center';
+        if (n.avatar) {
+          avatarWrapper.innerHTML = `<img src="${n.avatar}" alt="Avatar" class="w-full h-full object-cover">`;
+        } else {
+          avatarWrapper.innerHTML = '<i class="fas fa-bell text-white bg-teal-500 p-2 rounded-full"></i>';
         }
 
-        // Function to remove a notification
-        function removeNotification(id) {
-            const index = notifications.findIndex(notification => notification.id === id);
-            if (index !== -1) {
-                notifications.splice(index, 1);
-                renderNotifications();
-            }
-        }
+        const content = document.createElement('div');
+        content.className = 'flex-1';
+        content.innerHTML = `<p class="text-gray-800">${n.message}</p><p class="text-sm text-gray-500 mt-1">${n.date}</p>`;
 
-        // Initial render
-        document.addEventListener('DOMContentLoaded', renderNotifications);
-    </script>
+        const dismiss = document.createElement('button');
+        dismiss.className = 'ml-4 text-gray-400 hover:text-gray-600 text-xl';
+        dismiss.innerHTML = '&times;';
+        dismiss.onclick = () => removeNotification(n.id);
+
+        item.append(avatarWrapper, content, dismiss);
+        list.appendChild(item);
+      });
+    }
+
+    function removeNotification(id) {
+      const idx = notifications.findIndex(n => n.id === id);
+      if (idx > -1) {
+        notifications.splice(idx, 1);
+        renderNotifications();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNotifications();
+      document.getElementById('openSidebar').addEventListener('click', () => document.getElementById('sidebar').classList.remove('hidden'));
+      document.getElementById('closeSidebar').addEventListener('click', () => document.getElementById('sidebar').classList.add('hidden'));
+    });
+  </script>
 </body>
-
 </html>
